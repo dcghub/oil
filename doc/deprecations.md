@@ -17,11 +17,14 @@ POSIX- and bash-compatible mode.  Oil is compatible by default.
 
 ## Right Now (`shopt -s oil:basic`)
 
-This is what new Oil users should know about.  There are two things!
+Here are two things that Oil users should know about, one major and one minor:
+The meaning of `()` has changed, and the meaning of `@()` has changed.
 
 ### Use `forkwait` for subshells rather than `()` (`shopt -s parse_paren`)
 
-TODO: Implement `forkwait`.
+Subshells are **uncommon** in idiomatic Oil code, so they have the somewhat
+awkward name `forkwait`.  (There is a `fork` builtin for `&` and a `wait
+builtin.)
 
 No:
 
@@ -49,6 +52,14 @@ Yes:
     }
     echo $PWD  # restored
 
+Justification: We're using parentheses for Oil expressions like
+
+    if (x > 0) { echo 'positive' }
+
+and subshells are uncommon.  Oil has blocks to save and restore state.
+
+TODO: Implement `forkwait`.
+
 ### Some Extended Globs Can't Be Used (`shopt -s parse_at`)
 
 No:
@@ -59,13 +70,13 @@ Use this Oil alias instead:
 
     echo ,(*.py|*.sh)
 
-TODO: Implement this.
-
 Justification: Most people don't know about extended globs, and we want
 explicitly split command subs like `@(seq 3)` to work.
 
 That is, Oil doesn't have implicit word splitting.  Instead, it uses [simple
 word evaluation](simple-word-eval.html).
+
+TODO: Implement this.
 
 ## Later (`shopt -s oil:all`, under  `bin/oil`)
 
